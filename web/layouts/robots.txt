@@ -1,0 +1,3 @@
+User-agent: *
+{{ if site.Params.preview }}Disallow: /{{ else }}Allow: /
+Sitemap: {{ "sitemap.xml" | absURL }}{{ end }}

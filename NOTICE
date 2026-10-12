@@ -1,0 +1,33 @@
+Cradle
+Copyright 2026 Andrew P Hunter. Published by Plainsight Systems LLC.
+
+Original content
+================
+
+The articles in "Let's Build a Transformer!", repository documentation,
+and original visual assets are licensed under CC BY 4.0, except for code
+examples, which are licensed under Apache 2.0 as described in LICENSE.
+Suggested attribution: "Cradle / Let's Build a Transformer! — Andrew P
+Hunter, published by Plainsight Systems, CC BY 4.0."
+
+docs/assets/cradle-readme.png was generated with ChatGPT for this project.
+It is offered under CC BY 4.0 to the extent any copyright applies to it.
+
+Third-party components
+======================
+
+IBM Plex Serif and IBM Plex Mono, in web/static/fonts/
+  Copyright © 2017 IBM Corp. with Reserved Font Name "Plex".
+  SIL Open Font License, Version 1.1. The full license is included in
+  web/static/fonts/OFL.txt and distributed with the site fonts.
+
+Exclusions
+==========
+
+Quotations from cited works remain their authors'. References to Jack
+Crenshaw's "Let's Build a Compiler!" do not relicense that work. Personal
+reading copies are not distributed with Cradle.
+
+Model weights are not distributed with this repository and remain subject
+to their respective licenses. Third-party dependencies retain their own
+licenses; the repository's licenses do not replace them.

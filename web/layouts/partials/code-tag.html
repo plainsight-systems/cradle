@@ -1,0 +1,3 @@
+{{- if and site.Params.repository (not .page.Params.specimen) (not site.Params.preview) -}}
+<a href="{{ site.Params.repository }}/tree/{{ .tag }}"><code>{{ .tag }}</code></a>
+{{- else -}}<code>{{ .tag }}</code>{{- end -}}

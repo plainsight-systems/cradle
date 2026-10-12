@@ -1,0 +1,31 @@
+name: Check Cradle baseline
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  baseline:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2025, macos-15]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14.5'
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Prepare pinned dependencies
+        run: python scripts/setup.py
+      - name: Build
+        run: dotnet build Cradle.slnx -c Release --no-restore --nologo
+      - name: Run CPU-side tests
+        run: dotnet test Cradle.slnx -c Release --no-build --no-restore --nologo
+      - name: Run the baseline
+        run: dotnet run --project src/Cradle -c Release --no-build --no-restore

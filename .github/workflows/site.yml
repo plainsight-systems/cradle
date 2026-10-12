@@ -1,0 +1,25 @@
+name: Check site and publishing
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14.5'
+      - uses: ./.github/actions/hugo
+      - name: Test publication boundaries and exporter
+        run: python3 -m unittest discover -s scripts/tests -v
+      - name: Build for a project subpath
+        run: python3 scripts/site.py build --base-url https://example.org/cradle/
+      - name: Check the article preview
+        run: python3 scripts/site.py build --preview --base-url https://example.org/cradle/

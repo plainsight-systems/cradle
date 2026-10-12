@@ -1,0 +1,28 @@
+# Reference copies of Crenshaw's "Let's Build a Compiler!": "All rights reserved", personal reading only.
+references/crenshaw-lets-build-a-compiler/
+
+# .NET build output
+bin/
+obj/
+*.user
+.vs/
+
+.DS_Store
+
+# Machine-specific working context
+/CLAUDE.local.md
+
+# Local experiments
+/experiments/
+
+# Downloaded weights and local dependency checkouts
+/models/
+/.deps/
+
+# Generated site output and Hugo caches
+/dist/
+/dist-preview/
+__pycache__/
+/web/public/
+/web/resources/
+/web/.hugo_build.lock

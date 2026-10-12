@@ -1,0 +1,48 @@
+{{ $pages := where (where (where site.RegularPages "Section" "lessons") "Draft" false) "Date" "le" now }}
+{{ $numbered := where $pages "Params.lesson" "gt" 0 }}
+{{ $lessons := site.Data.lessons }}
+{{ if .IsHome }}{{ $lessons = first 4 $lessons }}{{ end }}
+<div class="section-heading">
+  <h2 class="eyebrow" id="series-heading">The series</h2>
+  <p>{{ len $numbered }} of {{ len site.Data.lessons }} lessons published</p>
+</div>
+{{ $prologue := where $pages "Params.lesson" 0 }}
+<div class="prologue-entry">
+  <p class="eyebrow">Start here · Prologue</p>
+  {{ with $prologue }}{{ range first 1 . }}
+    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    <p>{{ .Description }}</p>
+    <p class="lesson-status">Published · <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 Jan 2006" }}</time></p>
+  {{ end }}{{ else }}
+    <h3>{{ site.Data.prologue.title }}</h3>
+    <p>{{ site.Data.prologue.description }}</p>
+    <p class="lesson-status">Planned</p>
+  {{ end }}
+</div>
+{{ with $pages }}
+  {{ range first 1 .ByDate.Reverse }}<p class="series-note"><a class="latest-lesson" href="{{ .RelPermalink }}">Latest: {{ .Title }} <span aria-hidden="true">→</span></a></p>{{ end }}
+{{ else }}
+  <p class="series-note">The series is in preparation. {{ if .IsHome }}Here is where we’ll start.{{ else }}Here is the path we’ll take.{{ end }}</p>
+{{ end }}
+<ol class="lesson-list">
+  {{ range $lessons }}
+  {{ $lesson := . }}
+  {{ $matches := where $pages "Params.lesson" .number }}
+  <li class="{{ if $matches }}lesson-published{{ else }}lesson-planned{{ end }}">
+    <span class="lesson-number" aria-hidden="true">{{ printf "%02d" (int .number) }}</span>
+    <div class="lesson-name">
+      {{ with $matches }}{{ range first 1 . }}
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        <span class="lesson-status">Published · <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 Jan 2006" }}</time></span>
+      {{ end }}{{ else }}
+        <span>{{ $lesson.title }}</span>
+        <span class="lesson-status">Planned</span>
+      {{ end }}
+    </div>
+    <div class="lesson-detail"><p>{{ .description }}</p>
+      {{ range first 1 $matches }}<a class="read-lesson" href="{{ .RelPermalink }}" aria-label="Read lesson {{ printf "%02d" (int .Params.lesson) }}: {{ .Title }}">Read lesson <span aria-hidden="true">→</span></a>{{ end }}
+    </div>
+  </li>
+  {{ end }}
+</ol>
+{{ if .IsHome }}<a class="text-link" href="{{ "lessons/" | relURL }}">View the full series <span aria-hidden="true">→</span></a>{{ end }}

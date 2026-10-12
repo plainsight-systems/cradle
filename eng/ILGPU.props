@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <ILGPURevision>24cb87d6669c177428bd4ef1b8d05d9652b21c4b</ILGPURevision>
+    <ILGPURepository>$(MSBuildThisFileDirectory)../.deps/ilgpu-$(ILGPURevision)</ILGPURepository>
+  </PropertyGroup>
+</Project>

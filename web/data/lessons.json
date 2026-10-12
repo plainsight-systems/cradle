@@ -1,0 +1,92 @@
+[
+  {
+    "number": 1,
+    "title": "The cradle",
+    "description": "Run our first kernel on the GPU."
+  },
+  {
+    "number": 2,
+    "title": "Buffers and shapes",
+    "description": "Give the data a shape we can work with."
+  },
+  {
+    "number": 3,
+    "title": "Matrix multiplication",
+    "description": "Build the operation at the heart of the model."
+  },
+  {
+    "number": 4,
+    "title": "Softmax",
+    "description": "Turn scores into a stable distribution."
+  },
+  {
+    "number": 5,
+    "title": "Tokens in",
+    "description": "Convert text to token IDs and back with byte-level BPE."
+  },
+  {
+    "number": 6,
+    "title": "Embeddings",
+    "description": "Look up a vector for each token on the GPU."
+  },
+  {
+    "number": 7,
+    "title": "One attention head",
+    "description": "Combine projections, a causal mask, and a weighted sum."
+  },
+  {
+    "number": 8,
+    "title": "Many heads",
+    "description": "Extend attention to multiple heads and grouped queries."
+  },
+  {
+    "number": 9,
+    "title": "Position",
+    "description": "Give queries and keys a sense of position with RoPE."
+  },
+  {
+    "number": 10,
+    "title": "Normalization and residuals",
+    "description": "Add RMSNorm and the connections around attention."
+  },
+  {
+    "number": 11,
+    "title": "The gated MLP",
+    "description": "Complete our first transformer block."
+  },
+  {
+    "number": 12,
+    "title": "GGUF",
+    "description": "Read model weights and load them into GPU buffers."
+  },
+  {
+    "number": 13,
+    "title": "A real block",
+    "description": "Check the loaded block against an independent reference."
+  },
+  {
+    "number": 14,
+    "title": "The whole model",
+    "description": "Run every block and generate text with greedy decoding."
+  },
+  {
+    "number": 15,
+    "title": "The KV cache",
+    "description": "Reuse previous keys and values during generation."
+  },
+  {
+    "number": 16,
+    "title": "Sampling",
+    "description": "Add temperature, top-k, and top-p to the generation loop."
+  },
+  {
+    "number": 17,
+    "title": "Quantized weights",
+    "description": "Run four-bit weights and examine the tradeoffs."
+  },
+  {
+    "number": 18,
+    "title": "Performance",
+    "description": "Measure the engine and improve the kernels we already have."
+  }
+]

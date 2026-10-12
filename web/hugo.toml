@@ -1,0 +1,35 @@
+baseURL = 'http://localhost:1313/'
+title = 'Cradle'
+languageCode = 'en-us'
+timeZone = 'UTC'
+disableKinds = ['taxonomy', 'term', 'RSS']
+enableRobotsTXT = true
+
+[params]
+description = 'Let’s Build a Transformer! A practical series building a transformer inference engine in C#, one GPU operation at a time.'
+author = 'Andrew Hunter'
+# Set once the public repository exists. Never infer it from a local checkout.
+repository = ''
+
+[markup.highlight]
+style = 'github-dark'
+noClasses = true
+tabWidth = 4
+
+[markup.tableOfContents]
+startLevel = 2
+endLevel = 3
+
+[markup.goldmark.extensions.passthrough]
+enable = true
+[markup.goldmark.extensions.passthrough.delimiters]
+block = [['\[', '\]'], ['$$', '$$']]
+inline = [['\(', '\)']]
+
+[[module.mounts]]
+source = 'assets'
+target = 'assets'
+[[module.mounts]]
+source = '../docs/assets'
+target = 'assets/art'
+includeFiles = ['cradle-readme.png']

@@ -1,0 +1,16 @@
+Cradle is distributed under a split license.
+
+Source code and configuration, including C#, site templates, stylesheets,
+build and publishing scripts, tests, and configuration files, are licensed
+under the Apache License, Version 2.0. See LICENSE-CODE. Code examples in
+the articles are also covered by this license.
+
+Documentation, prose, and original visual assets are licensed under the
+Creative Commons Attribution 4.0 International license. See LICENSE-CONTENT.
+
+Each work is governed by the applicable scope above; the two licenses are
+not cumulative requirements on every file. Third-party components keep
+their own licenses. Attribution and exclusions are listed in NOTICE.
+
+The name "Plainsight Systems" and its wordmark, logomark and icons are
+trademarks of Plainsight Systems LLC and are excluded from both licenses.

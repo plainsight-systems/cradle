@@ -1,0 +1,35 @@
+{{ define "main" }}
+<article class="wrap page-space">
+  <header class="article-header">
+    <p class="eyebrow"><a href="{{ "lessons/" | relURL }}">Let’s Build a Transformer!</a> / {{ if eq (int .Params.lesson) 0 }}Prologue{{ else }}Lesson {{ printf "%02d" (int .Params.lesson) }}{{ end }}</p>
+    <h1>{{ .Title }}</h1>
+    <p class="lead">{{ .Description }}</p>
+    <p class="byline">{{ site.Params.author }}{{ if not .Params.specimen }} <span aria-hidden="true">·</span> <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time>{{ end }}</p>
+    {{ if .Params.specimen }}<p class="eyebrow preview-label">Layout preview · Sample content</p>{{ else if .Draft }}<p class="eyebrow preview-label">Draft · Not published</p>{{ end }}
+    <div class="snapshots"><span class="eyebrow">Code snapshots</span>
+      <span>Start: {{ with .Params.start_tag }}{{ partial "code-tag.html" (dict "tag" . "page" $) }}{{ else }}an empty program{{ end }}</span>
+      <span>Finish: {{ with .Params.end_tag }}{{ partial "code-tag.html" (dict "tag" . "page" $) }}{{ else }}not released{{ end }}</span>
+      {{ if .Params.specimen }}<em>Example release labels</em>{{ end }}
+    </div>
+  </header>
+  <div class="article-layout">
+    {{ if .Fragments.Headings }}
+    <aside class="contents" aria-label="Article contents">
+      <div class="contents-desktop"><p class="eyebrow">In this article</p>{{ .TableOfContents }}</div>
+      <details class="contents-mobile"><summary>In this article</summary>{{ replace .TableOfContents "id=\"TableOfContents\"" "id=\"ContentsMobile\"" | safeHTML }}</details>
+    </aside>
+    {{ end }}
+    <div class="prose article-body">{{ .Content }}</div>
+  </div>
+  {{ if not .Params.specimen }}
+  <nav class="lesson-navigation" aria-label="Lesson navigation">
+    {{ $number := int .Params.lesson }}
+    {{ $pages := where site.RegularPages "Section" "lessons" }}
+    {{ $previous := where $pages "Params.lesson" (sub $number 1) }}
+    {{ $next := where $pages "Params.lesson" (add $number 1) }}
+    <div>{{ range $previous }}<span class="eyebrow">{{ if eq (int .Params.lesson) 0 }}Prologue{{ else }}Previous lesson{{ end }}</span><a href="{{ .RelPermalink }}">← {{ .Title }}</a>{{ else }}<a href="{{ "lessons/" | relURL }}">← The series</a>{{ end }}</div>
+    <div>{{ range $next }}<span class="eyebrow">Next lesson</span><a href="{{ .RelPermalink }}">{{ .Title }} →</a>{{ else }}<a href="{{ "lessons/" | relURL }}">All lessons →</a>{{ end }}</div>
+  </nav>
+  {{ end }}
+</article>
+{{ end }}

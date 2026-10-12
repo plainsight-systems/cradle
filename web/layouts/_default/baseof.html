@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if not .IsHome }}{{ .Title }} · {{ end }}Cradle</title>
+  <meta name="description" content="{{ .Description | default site.Params.description }}">
+  {{ $canonical := .Params.canonicalURL | default .Permalink }}
+  <link rel="canonical" href="{{ $canonical }}">
+  {{ if or site.Params.preview .Draft }}<meta name="robots" content="noindex, nofollow">{{ end }}
+  <meta property="og:title" content="{{ .Title }}">
+  <meta property="og:description" content="{{ .Description | default site.Params.description }}">
+  <meta property="og:type" content="{{ if eq .Section "lessons" }}article{{ else }}website{{ end }}">
+  <meta property="og:url" content="{{ $canonical }}">
+  {{ $art := resources.Get "art/cradle-readme.png" }}
+  {{ $social := $art.Resize "1200x webp q85" }}
+  <meta property="og:image" content="{{ $social.Permalink }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="{{ "fonts/PlexSerif-Regular.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  {{ $css := resources.Get "site.css" | resources.Copy "css/site.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+  <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="masthead">
+    <div class="wrap masthead-inner">
+      <a class="brand" href="{{ site.Home.RelPermalink }}" aria-label="Cradle home">Cradle</a>
+      <nav aria-label="Main navigation">
+        <a href="{{ "lessons/" | relURL }}" {{ if eq .Section "lessons" }}aria-current="{{ if .IsSection }}page{{ else }}true{{ end }}"{{ end }}>Series</a>
+        <a href="{{ "about/" | relURL }}" {{ if eq .Section "about" }}aria-current="page"{{ end }}>About</a>
+        {{ with site.Params.repository }}<a href="{{ . }}">Code <span aria-hidden="true">↗</span></a>{{ end }}
+      </nav>
+    </div>
+  </header>
+  {{ if site.Params.preview }}<div class="preview-banner">Local preview · Includes drafts and sample content · Not for publication</div>{{ end }}
+  <main id="main">{{ block "main" . }}{{ end }}</main>
+  <footer class="footer">
+    <div class="wrap footer-top"><a class="brand" href="{{ site.Home.RelPermalink }}">Cradle</a><a href="https://plainsight-systems.com/">A Plainsight Systems project <span aria-hidden="true">↗</span></a></div>
+    <div class="wrap footer-bottom"><span>Writing © {{ now.Year }} <a href="https://andrewphunter.com/">Andrew P Hunter</a></span><span><a href="https://creativecommons.org/licenses/by/4.0/">Writing: CC BY 4.0</a> · <a href="https://www.apache.org/licenses/LICENSE-2.0">Code: Apache 2.0</a></span></div>
+  </footer>
+</body>
+</html>

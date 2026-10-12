@@ -1,0 +1,12 @@
+<Project>
+  <Import Project="eng/ILGPU.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Match the C# language version understood by the pinned kernel compiler. -->
+    <LangVersion>13.0</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode>true</RestoreLockedMode>
+  </PropertyGroup>
+</Project>
