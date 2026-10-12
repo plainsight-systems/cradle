@@ -6,7 +6,7 @@ import re
 import subprocess
 import tempfile
 
-from content import HUGO_VERSION, PublicationError
+from content import PublicationError, check_hugo_version
 
 # Fences and inline code win before formula delimiters. Code samples stay literal.
 TOKENS = re.compile(
@@ -23,8 +23,7 @@ def render_math(body):
     if not matches:
         return body
     version = subprocess.check_output(["hugo", "version"], text=True)
-    if not re.match(rf"hugo v{re.escape(HUGO_VERSION)}(?:\+| )", version):
-        raise PublicationError(f"Formula export requires Hugo {HUGO_VERSION}")
+    check_hugo_version(version)
     formulas = [{"tex": next(m[k] for k in ("bracket", "dollar", "paren") if m[k] is not None),
                  "block": m["display"] is not None} for m in matches]
     with tempfile.TemporaryDirectory(prefix="cradle-math-") as temp:

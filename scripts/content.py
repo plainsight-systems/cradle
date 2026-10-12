@@ -23,6 +23,12 @@ class PublicationError(Exception):
     pass
 
 
+def check_hugo_version(version):
+    # Official binaries include a Git SHA; Homebrew's build omits it.
+    if not re.match(rf"hugo v{re.escape(HUGO_VERSION)}(?:-[0-9a-f]{{7,40}})?(?:\+|\s|$)", version):
+        raise PublicationError(f"Use Hugo {HUGO_VERSION}; found {version.strip()}")
+
+
 def git(root, *args):
     result = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True)
     if result.returncode:

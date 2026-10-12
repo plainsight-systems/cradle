@@ -11,7 +11,7 @@ import sys
 import tempfile
 from urllib.parse import urlsplit
 
-from content import (ROOT, HUGO_VERSION, PublicationError, articles, check_release,
+from content import (ROOT, PublicationError, articles, check_release, check_hugo_version,
                      document, no_symlinks, page_metadata, rendered_body)
 
 
@@ -52,8 +52,7 @@ def main():
     if parsed.scheme not in {"http", "https"} or not parsed.netloc or parsed.query or parsed.fragment or not base.endswith("/"):
         parser.error("--base-url must be an absolute HTTP(S) URL ending with /, without query or fragment")
     version = subprocess.check_output(["hugo", "version"], text=True)
-    if not version.startswith(f"hugo v{HUGO_VERSION}+") and not version.startswith(f"hugo v{HUGO_VERSION} "):
-        raise PublicationError(f"Use Hugo {HUGO_VERSION}; found {version.strip()}")
+    check_hugo_version(version)
     output = ROOT / ("dist-preview" if args.preview else "dist")
     no_symlinks(output)
     with tempfile.TemporaryDirectory(prefix="cradle-site-") as temp:

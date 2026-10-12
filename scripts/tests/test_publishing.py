@@ -13,7 +13,7 @@ import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from content import ROOT, PublicationError, articles, git, read_article, tree_hashes
+from content import ROOT, PublicationError, articles, git, read_article, tree_hashes, check_hugo_version
 from publish_article import export
 from check_site import check
 from render_math import render_math
@@ -24,6 +24,16 @@ spec.loader.exec_module(site_module)
 
 
 class PublishingTests(unittest.TestCase):
+    def test_hugo_version_formats_keep_exact_release_pin(self):
+        for version in ("hugo v0.154.2+extended+withdeploy darwin/arm64",
+                        "hugo v0.154.2-abcdef123456+extended linux/amd64",
+                        "hugo v0.154.2 linux/amd64"):
+            check_hugo_version(version)
+        for version in ("hugo v0.154.20+extended", "hugo v0.155.0+extended",
+                        "hugo v0.154.2-rc1+extended", "hugo v0.154.2garbage"):
+            with self.assertRaises(PublicationError):
+                check_hugo_version(version)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
