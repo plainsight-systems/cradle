@@ -47,8 +47,9 @@ The SDK pin is in `global.json`; ILGPU's source revision is in `eng/ILGPU.props`
 reviewed package lock files for both upstream build dependencies and our projects. See
 [setup details](scripts/README.md#net-baseline) and the [draft prologue](articles/00-getting-the-cradle-ready/index.md).
 
-Validated locally on Apple Silicon macOS. The Windows/Linux/macOS workflow is configured but has not run
-remotely yet. Actual GPU correctness checks are separate from these ordinary build checks.
+Validated locally on Apple Silicon macOS and in GitHub Actions on Windows, Linux, and macOS. The checks
+restore the pinned dependencies, build, test runtime loading, and launch the baseline. Actual GPU correctness
+checks are separate. See the [CI runs](https://github.com/plainsight-systems/cradle/actions/workflows/dotnet.yml).
 
 ## Preview the site
 
@@ -65,7 +66,8 @@ See the [site README](web/README.md) for site structure and content maintenance,
 
 ## Articles and releases
 
-The full articles will appear on andrewphunter.com and the project's GitHub Pages site, both from the sources in
+The project site is live at [cradle.plainsight-systems.com](https://cradle.plainsight-systems.com/).
+The full articles will appear there and on andrewphunter.com, both from the sources in
 `articles/`. Each published lesson will link to its runnable code snapshot.
 
 `main` holds the latest completed, reviewed lesson. Work can stay on local lesson branches; publish `main` and

@@ -24,8 +24,8 @@ locks and the application/test locks, review their diffs, and validate before co
 restore to get past an unexplained setup failure. ILGPU source and package binaries retain their own licenses.
 
 `.github/workflows/dotnet.yml` runs setup, build, CPU-side tests, and the program on standard Windows, Linux,
-and macOS runners. It makes no GPU-execution claim. Baseline validation is currently local macOS only; CI
-results await the remote. GPU checks belong to the numbered lessons and the separately documented hardware plan.
+and macOS runners. Setup, build, runtime loading, and program launch passed on all three on 2026-10-12.
+It makes no GPU-execution claim. GPU checks belong to the numbered lessons and the separately documented hardware plan.
 
 ## Site requirements
 
