@@ -11,7 +11,7 @@ until it loads real open weights and generates text.
 Named for the "cradle" in Jack Crenshaw's "Let's Build a Compiler!" (1988 to 1995), the starter program his whole
 series grew from.
 
-**Status:** the project site and publishing scripts are in place. The runnable baseline and a draft setup prologue are ready for review. The numbered lessons have not been written. Local experiments have validated
+**Status:** the project site and publishing scripts are in place. The runnable baseline and setup prologue are published. The numbered lessons have not been written. Local experiments have validated
 C# transformer kernels and a complete small model on Apple Silicon through ILGPU's native Metal backend.
 
 ## Repository layout
@@ -45,7 +45,7 @@ ILGPU source; first use requires internet access. Expect one passing dependency-
 
 The SDK pin is in `global.json`; ILGPU's source revision is in `eng/ILGPU.props`. The setup script uses
 reviewed package lock files for both upstream build dependencies and our projects. See
-[setup details](scripts/README.md#net-baseline) and the [draft prologue](articles/00-getting-the-cradle-ready/index.md).
+[setup details](scripts/README.md#net-baseline) and the [prologue](articles/00-getting-the-cradle-ready/index.md).
 
 Validated locally on Apple Silicon macOS and in GitHub Actions on Windows, Linux, and macOS. The checks
 restore the pinned dependencies, build, test runtime loading, and launch the baseline. Actual GPU correctness

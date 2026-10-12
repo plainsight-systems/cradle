@@ -38,7 +38,7 @@ Requirements: **Hugo 0.154.2** and **Python 3.11 or newer**. No Python packages,
 python3 scripts/site.py serve --preview
 ```
 
-Open `http://localhost:1313/`. The article layout specimen is at `/preview/`; the draft prologue is at `/lessons/00-getting-the-cradle-ready/`. Preview includes drafts and future-dated articles, displays a notice, and tells crawlers not to index the pages. Use `--port 1314` if necessary. Templates, CSS, and data reload automatically. **Restart after editing article or site-page sources**, which are selected and staged at startup.
+Open `http://localhost:1313/`. The article layout specimen is at `/preview/`; the prologue is at `/lessons/00-getting-the-cradle-ready/`. Preview includes drafts and future-dated articles, displays a notice, and tells crawlers not to index the pages. Use `--port 1314` if necessary. Templates, CSS, and data reload automatically. **Restart after editing article or site-page sources**, which are selected and staged at startup.
 
 Omit `--preview` to serve only public content. Production writes `dist/`; preview writes `dist-preview/`. Both are ignored. Never upload preview output.
 
@@ -65,7 +65,7 @@ The exporter:
 
 - Accepts only `draft = false` articles dated today or earlier (UTC), with valid starting and completed code tags.
 - Copies `index.md` and only the images named in `publish_assets`. Rejects symlinks and paths escaping the article.
-- Represents the prologue as `lesson = 0` and personal-site `part = 0`; lesson numbering stays 1–18. The personal site currently labels this “Part 0” in its generic series navigation.
+- Represents the prologue as `lesson = 0` and personal-site `part = 0`; lesson numbering stays 1–18. The personal site labels part zero “Prologue” in its series navigation.
 - Emits native Hugo JSON front matter with the personal site's `series` and `part` fields, canonical URL, and source repository, article path, and commit revision. The body stays Markdown, with code snapshot links added and portable lesson links resolved.
 - For `math = true`, uses the pinned Hugo math renderer to replace formula spans with MathML. Literal fenced/inline code is preserved; the personal edition needs no additional math scripts.
 - Requires the selected source files to be committed before writing. Dry runs may inspect uncommitted edits.

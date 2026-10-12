@@ -12,7 +12,7 @@ python3 scripts/site.py serve --preview
 ```
 
 Open `http://localhost:1313/` for the homepage, `/lessons/` for the dedicated series index, and `/preview/` for
-the sample article layout. The draft prologue is at `/lessons/00-getting-the-cradle-ready/` in preview mode. Omit `--preview` to see only public content. Templates, styles, and sequence data
+the sample article layout. The published prologue is at `/lessons/00-getting-the-cradle-ready/`. Omit `--preview` to see only public content. Templates, styles, and sequence data
 reload automatically; restart the server after editing article sources or files in `web/content/`, which are
 staged at startup.
 
@@ -48,7 +48,7 @@ calling Hugo, so working material never becomes a page resource. A direct `hugo`
 article pipeline and is not a release build. See [article authoring](../articles/README.md) for the metadata,
 image allowlist, and portable links used by both publication destinations.
 
-The setup prologue is drafted; no numbered lessons have been authored. The `/preview/` fixture exercises
+The setup prologue is published; no numbered lessons have been authored. The `/preview/` fixture exercises
 prose, math, code, and tables. It lives in `scripts/fixtures/`, outside Hugo's normal content tree, and is never
 a published lesson. Preview builds include draft pages, but the index still treats their lessons as Planned.
 
