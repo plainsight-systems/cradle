@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Dependencies/">
+    <Project Path=".deps/ilgpu-24cb87d6669c177428bd4ef1b8d05d9652b21c4b/Src/ILGPU/ILGPU.csproj" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Cradle/Cradle.csproj" />
   </Folder>
