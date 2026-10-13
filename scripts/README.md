@@ -14,18 +14,45 @@ dotnet run --project src/Cradle -c Release --no-build --no-restore
 Use `python` on Windows if that is the installed command. Put the pinned SDK on PATH; `global.json` rejects
 other SDK versions. Setup validates and builds ILGPU from the revision in `eng/ILGPU.props`, beneath ignored
 `.deps/`. It checks for tracked changes or unexpected untracked files and never resets an existing checkout.
-It restores the upstream compiler and solution using committed package locks and nuget.org. A missing GPU
-is fine for this baseline; the test checks runtime assembly loading, and the application prints its greeting.
-The built ILGPUC toolchain is ready for lesson 1, which will add kernel compilation and GPU execution.
+It restores the upstream compiler and solution using committed package locks and nuget.org, then runs
+`check_kernel_setup.py`. That check copies the application's project settings into a temporary directory
+whose path contains spaces, compiles a small kernel, explicitly executes it on the CPU, and checks all 1,031
+outputs. It neither changes the application nor requires a GPU. The xUnit test checks runtime assembly
+loading, and the application prints its greeting.
+
+`Cradle.csproj` imports the kernel build targets and points to the compiler built by setup. `ILGPUBackend`
+defaults to `Metal` on macOS and `CUDA` elsewhere. Override it with `-p:ILGPUBackend=OpenCL` or
+`-p:ILGPUBackend=ROCm` when building for those backends. Use the same setting on later rebuilds. The pin
+requires one backend per build; generating several together produces invalid C#. Device selection at
+runtime must match the compiled backend. Native GPU toolchains are not invoked during the default build;
+the GPU runtime compiles the embedded source when loading it.
+
+`eng/Cradle.Kernels.targets` imports upstream source rewriting and cleanup, and replaces the compilation
+invocation target to quote response-file paths. It rebuilds kernel output each time, removing stale generated
+files when launches or backend settings change. The upstream source checkout remains unmodified.
+Use explicit class methods and `Main`: the pinned compiler rejects top-level programs containing launches.
+Generated Metal code currently produces warnings about embedded source and a hidden inherited member.
+
+To check the integration separately:
+
+```sh
+python3 scripts/check_kernel_setup.py
+python3 scripts/check_kernel_setup.py --backend Metal
+python3 scripts/check_kernel_setup.py --backend CUDA --compile-only
+```
+
+The Metal command requires a Metal device and verifies execution. `--compile-only` checks generated source
+and its C# wrapper, not native GPU compilation or execution. The available backend names are CPU, CUDA,
+ROCm, OpenCL, and Metal. The CPU check is explicitly selected test execution, never a GPU fallback.
 
 Our project restores default to locked mode. `eng/ilgpu-locks/` contains the three upstream project locks
 copied into the dependency checkout during setup. For an intentional dependency update, regenerate those
 locks and the application/test locks, review their diffs, and validate before committing. Do not bypass locked
 restore to get past an unexplained setup failure. ILGPU source and package binaries retain their own licenses.
 
-`.github/workflows/dotnet.yml` runs setup, build, CPU-side tests, and the program on standard Windows, Linux,
-and macOS runners. Setup, build, runtime loading, and program launch passed on all three on 2026-10-12.
-It makes no GPU-execution claim. GPU checks belong to the numbered lessons and the separately documented hardware plan.
+`.github/workflows/dotnet.yml` runs setup (including the CPU kernel check), kernel source generation for
+CUDA/ROCm/OpenCL/Metal, build, CPU-side tests, and the program on standard Windows, Linux, and macOS runners.
+It makes no GPU-execution claim. Hardware checks remain separate.
 
 ## Site requirements
 

@@ -40,7 +40,8 @@ dotnet run --project src/Cradle -c Release --no-build --no-restore
 ```
 
 On Windows, use `python` if that is your installed Python command. Setup fetches and builds the pinned
-ILGPU source; first use requires internet access. Expect one passing dependency-load test and
+ILGPU source and verifies kernel compilation and execution with a temporary CPU check; first use requires
+internet access. Expect `Kernel setup verified: CPU, 1031 checked outputs.`, one passing dependency-load test and
 `Cradle is ready.` The baseline does not require a GPU; lesson 1 adds GPU discovery and the first kernel.
 
 The SDK pin is in `global.json`; ILGPU's source revision is in `eng/ILGPU.props`. The setup script uses
@@ -48,7 +49,7 @@ reviewed package lock files for both upstream build dependencies and our project
 [setup details](scripts/README.md#net-baseline) and the [prologue](articles/00-getting-the-cradle-ready/index.md).
 
 Validated locally on Apple Silicon macOS and in GitHub Actions on Windows, Linux, and macOS. The checks
-restore the pinned dependencies, build, test runtime loading, and launch the baseline. Actual GPU correctness
+restore the pinned dependencies, check kernel compilation and CPU execution, build, test runtime loading, and launch the baseline. Actual GPU correctness
 checks are separate. See the [CI runs](https://github.com/plainsight-systems/cradle/actions/workflows/dotnet.yml).
 
 ## Preview the site

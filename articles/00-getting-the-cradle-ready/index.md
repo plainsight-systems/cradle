@@ -72,30 +72,52 @@ python3 scripts/setup.py
 
 On Windows, use `python` in place of `python3` if that is how Python is installed.
 
-The script downloads the pinned ILGPU source into `.deps/`, checks its revision, restores its dependencies, and builds the kernel compiler. It then restores the Cradle solution. The first run needs internet access and takes longer than subsequent runs. Everything it downloads or builds stays out of the repository’s published source.
+The script downloads the pinned ILGPU source into `.deps/`, checks its revision, restores its dependencies, and builds the kernel compiler. It then restores the Cradle solution and checks the compiler wiring by building and running a small temporary kernel on the CPU. You should see `Kernel setup verified: CPU, 1031 checked outputs.` The temporary program is removed afterward; our cradle still starts with a greeting. The first run needs internet access and takes longer than subsequent runs. Everything it downloads or builds stays out of the repository’s published source.
 
 There is another set of versions involved: the packages used to build ILGPU itself. One of its package references allows several versions, so pinning the Git revision alone would leave that choice open. The files in `eng/ilgpu-locks/` record the resolved versions and package hashes. Our own projects have `packages.lock.json` files for the same reason. Setup uses locked restore, which fails if the dependency declarations no longer agree with those files.
 
 You can rerun setup. It checks the existing checkout and refuses changed source instead of quietly building a different ILGPU. If it fails, read the reported error before changing any version pins.
 
+## Connect the kernel compiler
+
+Building ILGPU’s compiler is only half the setup. Our application also needs to call it when we build. `Cradle.csproj` points to that compiler and imports `eng/Cradle.Kernels.targets`, which connects it to `dotnet build`. The generated launch code uses unsafe operations internally, so the project enables `AllowUnsafeBlocks`. We won't need to write those operations ourselves.
+
+In this version, ILGPU finds kernel launches during the build, translates the kernel code, and generates the code that launches it. On Metal, the build embeds shader source that the Metal runtime compiles for the GPU when the program runs. The online ILGPU tutorials describe an older API: they compile kernels through the accelerator at runtime and allocate buffers directly through it. Our version uses build-time kernel translation and stream-based allocation. We’ll introduce those calls as we use them in lesson 1.
+
+The project’s `ILGPUBackend` setting chooses the kind of kernel code to generate. It defaults to `Metal` on Mac and `CUDA` elsewhere. Other build targets are `ROCm` and `OpenCL`; choose the backend that matches the device and driver you intend to use. For example, an OpenCL build uses:
+
+```sh
+dotnet build Cradle.slnx -c Release --no-restore -p:ILGPUBackend=OpenCL
+```
+
+Use the same setting when rebuilding, including with `dotnet run`. This compiler revision needs a separate build for each backend. The setting controls compilation; it doesn't select a device. We’ll make that selection in lesson 1. The temporary setup check explicitly uses `CPU`, so preparing the tools does not require a GPU.
+
 ## Build and run the cradle
 
-The solution has two projects:
+We have two projects of our own:
 
 | Project | Purpose |
 | --- | --- |
 | `src/Cradle/Cradle.csproj` | The console program we’ll extend throughout the series |
 | `tests/Cradle.Tests/Cradle.Tests.csproj` | Checks that will grow alongside the implementation |
 
-The application references the ILGPU project in the pinned checkout. That project reference also brings its runtime dependencies into our build. The test project references the application and uses xUnit, with its package versions pinned in the project file and lock file.
+The application references the ILGPU project in the pinned checkout, which also appears under `Dependencies` in the solution so the editor can load its source. That project reference brings its runtime dependencies into our build. The test project references the application and uses xUnit, with its package versions pinned in the project file and lock file.
 
 Here is the whole of `src/Cradle/Program.cs`:
 
 ```csharp
-Console.WriteLine("Cradle is ready.");
+namespace Cradle;
+
+internal static class Program
+{
+    private static void Main()
+    {
+        Console.WriteLine("Cradle is ready.");
+    }
+}
 ```
 
-C# supplies the entry point for this top-level statement. We don’t need any application structure around it yet.
+We use an explicit `Main` because this ILGPU compiler revision cannot process top-level statements once a kernel launch is present. It is a little more structure than a one-line console program needs, but it gives us a starting point the kernel compiler can use. Everything stays in this file for lesson 1.
 
 Build the solution, run its tests, and launch the application:
 
@@ -111,8 +133,8 @@ For ordinary editing, you can use `dotnet run --project src/Cradle`; it builds b
 
 ## What we have checked
 
-The first test loads the ILGPU runtime assembly and checks that its accelerator type is available. That exercises the dependency path from the pinned source through our projects to the test runner. It does not create an accelerator or run a kernel.
+Setup has already checked that the application's compiler settings can translate, launch, and verify a temporary kernel on the CPU. The xUnit test loads the ILGPU runtime assembly and checks that its accelerator type is available. Together they check the compiler wiring and the dependency path through our projects to the test runner.
 
-That distinction will matter throughout the series. A successful build and a passing setup test tell us the tools fit together. Running a kernel on a particular GPU tells us something more, and that needs its own check.
+These checks tell us the tools fit together. Running a kernel on a particular GPU tells us something more, and we’ll do that in lesson 1.
 
 We now have a program that runs, a place for its tests, and fixed versions of the tools it depends on. In lesson 1, we’ll put those tools to work on the GPU.

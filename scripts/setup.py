@@ -58,6 +58,7 @@ def main():
         "-p:RestorePackagesWithLockFile=true", "--configfile", str(ROOT / "NuGet.Config"))
     run("dotnet", "build", str(compiler), "-c", "Release", "--no-restore", "--nologo", "-v", "quiet")
     run("dotnet", "restore", str(ROOT / "Cradle.slnx"), "--locked-mode")
+    run(sys.executable, str(ROOT / "scripts/check_kernel_setup.py"))
     print("Dependencies are ready. Run: dotnet run --project src/Cradle", flush=True)
 
 

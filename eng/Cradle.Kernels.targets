@@ -1,0 +1,42 @@
+<Project>
+  <Import Project="$(ILGPURepository)/Src/ILGPUC/build/ILGPU.Kernels.targets" />
+
+  <!-- Adapted from ILGPU.Kernels.targets at our pinned revision.
+       Copyright (c) 2016-2026 ILGPU Project. See ILGPU-LICENSE.txt.
+       Quote response-file paths so checkouts containing spaces work.
+       Keep upstream source swapping and cleanup; replace only invocation setup.
+       Always run this pass so changed backend options cannot reuse stale kernels. -->
+  <Target Name="ILGPUKernelCompile"
+          BeforeTargets="CoreCompile"
+          DependsOnTargets="ResolveAssemblyReferences">
+    <Error Condition="!Exists('$(ILGPURepository)/Bin/Release/net10.0/ILGPUC.dll')"
+           Text="The pinned ILGPU compiler is missing. Run scripts/setup.py first." />
+    <Error Condition="'$(ILGPUBackend)' != 'CPU' And '$(ILGPUBackend)' != 'CUDA' And '$(ILGPUBackend)' != 'ROCm' And '$(ILGPUBackend)' != 'OpenCL' And '$(ILGPUBackend)' != 'Metal'"
+           Text="Choose one ILGPUBackend: CPU, CUDA, ROCm, OpenCL, or Metal. This compiler pin requires a separate build for each backend." />
+    <!-- A removed launch or changed backend must not leave old generated types. -->
+    <RemoveDir Directories="$(ILGPUOutputDir)" />
+    <MakeDir Directories="$(ILGPUOutputDir)" />
+    <ItemGroup>
+      <_CradleBackends Include="$(ILGPUBackend)" />
+      <_CradleCompilerServices Include="$(ILGPUCompilerServices)" />
+      <_CradleKernelArgs Include="build" />
+      <_CradleKernelArgs Include="--compile-items" />
+      <_CradleKernelArgs Include="@(Compile->'&quot;%(FullPath)&quot;')" />
+      <_CradleKernelArgs Include="--references" />
+      <_CradleKernelArgs Include="@(ReferencePath->'&quot;%(FullPath)&quot;')" />
+      <_CradleKernelArgs Include="--output-dir" />
+      <_CradleKernelArgs Include="&quot;$(ILGPUOutputDir)&quot;" />
+      <_CradleKernelArgs Include="--project-dir" />
+      <_CradleKernelArgs Include="&quot;$(MSBuildProjectDirectory)&quot;" />
+      <_CradleKernelArgs Include="-b" />
+      <_CradleKernelArgs Include="@(_CradleBackends)" />
+      <_CradleKernelArgs Include="--compile" Condition="'$(ILGPUCompile)' == 'true'" />
+      <_CradleKernelArgs Include="--compiler-service" Condition="'@(_CradleCompilerServices)' != ''" />
+      <_CradleKernelArgs Include="@(_CradleCompilerServices->'&quot;%(Identity)&quot;')" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(ILGPUResponseFile)"
+                      Lines="@(_CradleKernelArgs)" Overwrite="true" />
+    <Exec Command="$(ILGPUCompilerTool) @&quot;$(ILGPUResponseFile)&quot; $(ILGPUBackendOptions) $(ILGPUCompilationOptions)"
+          ConsoleToMsBuild="true" />
+  </Target>
+</Project>

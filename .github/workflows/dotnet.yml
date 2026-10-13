@@ -23,6 +23,12 @@ jobs:
           global-json-file: global.json
       - name: Prepare pinned dependencies
         run: python scripts/setup.py
+      - name: Check GPU kernel source generation
+        run: |
+          python scripts/check_kernel_setup.py --backend CUDA --compile-only
+          python scripts/check_kernel_setup.py --backend ROCm --compile-only
+          python scripts/check_kernel_setup.py --backend OpenCL --compile-only
+          python scripts/check_kernel_setup.py --backend Metal --compile-only
       - name: Build
         run: dotnet build Cradle.slnx -c Release --no-restore --nologo
       - name: Run CPU-side tests
