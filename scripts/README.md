@@ -17,7 +17,8 @@ other SDK versions. Setup validates and builds ILGPU from the revision in `eng/I
 It restores the upstream compiler and solution using committed package locks and nuget.org, then runs
 `check_kernel_setup.py`. That check copies the application's project settings into a temporary directory
 whose path contains spaces, compiles a small kernel, explicitly executes it on the CPU, and checks all 1,031
-outputs. It neither changes the application nor requires a GPU. The xUnit test checks runtime assembly
+outputs. It checks both the first and a repeated build, and verifies that the generated kernel type is
+actually present in the application assembly. It neither changes the application nor requires a GPU. The xUnit test checks runtime assembly
 loading, and the application prints its greeting.
 
 `Cradle.csproj` imports the kernel build targets and points to the compiler built by setup. `ILGPUBackend`
@@ -27,8 +28,8 @@ requires one backend per build; generating several together produces invalid C#.
 runtime must match the compiled backend. Native GPU toolchains are not invoked during the default build;
 the GPU runtime compiles the embedded source when loading it.
 
-`eng/Cradle.Kernels.targets` imports upstream source rewriting and cleanup, and replaces the compilation
-invocation target to quote response-file paths. It rebuilds kernel output each time, removing stale generated
+`eng/Cradle.Kernels.targets` imports upstream cleanup, replaces the compilation invocation target to quote
+response-file paths, and explicitly orders source swapping after compilation. It rebuilds kernel output each time, removing stale generated
 files when launches or backend settings change. The upstream source checkout remains unmodified.
 Use explicit class methods and `Main`: the pinned compiler rejects top-level programs containing launches.
 Generated Metal code currently produces warnings about embedded source and a hidden inherited member.

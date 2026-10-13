@@ -4,7 +4,7 @@
   <!-- Adapted from ILGPU.Kernels.targets at our pinned revision.
        Copyright (c) 2016-2026 ILGPU Project. See ILGPU-LICENSE.txt.
        Quote response-file paths so checkouts containing spaces work.
-       Keep upstream source swapping and cleanup; replace only invocation setup.
+       Keep upstream cleanup; explicitly order compilation before source swapping.
        Always run this pass so changed backend options cannot reuse stale kernels. -->
   <Target Name="ILGPUKernelCompile"
           BeforeTargets="CoreCompile"
@@ -38,5 +38,23 @@
                       Lines="@(_CradleKernelArgs)" Overwrite="true" />
     <Exec Command="$(ILGPUCompilerTool) @&quot;$(ILGPUResponseFile)&quot; $(ILGPUBackendOptions) $(ILGPUCompilationOptions)"
           ConsoleToMsBuild="true" />
+  </Target>
+
+  <!-- Upstream's BeforeTargets hook can schedule swapping before our overridden
+       compiler target. Never select yesterday's generated files as today's input.
+       Do not condition this target on the manifest: compilation creates it. -->
+  <Target Name="ILGPUSwapSources"
+          BeforeTargets="CoreCompile"
+          DependsOnTargets="ILGPUKernelCompile">
+    <ReadLinesFromFile File="$(ILGPUManifest)" Condition="Exists('$(ILGPUManifest)')">
+      <Output TaskParameter="Lines" ItemName="_ILGPURewrittenOriginals" />
+    </ReadLinesFromFile>
+    <ItemGroup>
+      <Compile Remove="@(_ILGPURewrittenOriginals)"
+               MatchOnMetadata="FullPath"
+               MatchOnMetadataOptions="PathLike" />
+      <Compile Include="$(ILGPUOutputDir)rewritten/**/*.cs" />
+      <Compile Include="$(ILGPUOutputDir)generated/**/*.cs" />
+    </ItemGroup>
   </Target>
 </Project>

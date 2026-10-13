@@ -19,6 +19,10 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
+        if (!typeof(Program).Assembly.GetTypes().Any(t => t.Name == "Probe_CompiledKernel"))
+            throw new InvalidOperationException("Generated kernel was not included in the application");
+        if (args.Single() == "--verify-compiled-only")
+            return;
         // CPU is an explicit compiler check for hosted CI, never a GPU fallback.
         var backend = Enum.Parse<AcceleratorType>(args.Single());
         using var context = Context.CreateDefault();
@@ -73,23 +77,28 @@ def main():
         ET.SubElement(props, "Import", Project=str(ROOT / "Directory.Build.props"))
         ET.ElementTree(props).write(directory / "Directory.Build.props", encoding="unicode")
         (project_directory / "Program.cs").write_text(PROBE, encoding="utf-8")
-        commands = [
-            ["dotnet", "restore", "Cradle.csproj", "--locked-mode"],
-            ["dotnet", "build", "Cradle.csproj", "-c", "Release", "--no-restore",
-             f"-p:ILGPUBackend={args.backend}"],
-        ]
-        for command in commands:
-            subprocess.run(command, cwd=project_directory, check=True)
-        generated = project_directory / "obj/Release/net10.0/ilgpu/generated"
-        if not list(generated.glob("*_CompiledKernel.cs")):
-            raise RuntimeError("Build did not generate a compiled kernel; check the targets import")
-        if args.compile_only:
-            print(f"Kernel source generation verified: {args.backend}; no device execution.")
-        else:
-            subprocess.run(["dotnet", "run", "--project", "Cradle.csproj", "-c", "Release",
-                            "--no-build", "--no-restore", "--",
-                            "Cuda" if args.backend == "CUDA" else args.backend],
+        subprocess.run(["dotnet", "restore", "Cradle.csproj", "--locked-mode"],
+                       cwd=project_directory, check=True)
+        # Both a fresh build and the next build must compile the generated sources.
+        # Checking only their presence on disk misses incorrect MSBuild ordering.
+        for attempt in range(2):
+            print(f"Kernel build check {attempt + 1}/2: {args.backend}", flush=True)
+            subprocess.run(["dotnet", "build", "Cradle.csproj", "-c", "Release", "--no-restore",
+                            f"-p:ILGPUBackend={args.backend}"],
                            cwd=project_directory, check=True)
+            generated = project_directory / "obj/Release/net10.0/ilgpu/generated"
+            if not list(generated.glob("*_CompiledKernel.cs")):
+                raise RuntimeError("Build did not generate a compiled kernel; check the targets import")
+            if args.compile_only:
+                subprocess.run(["dotnet", "run", "--project", "Cradle.csproj", "-c", "Release",
+                                "--no-build", "--no-restore", "--", "--verify-compiled-only"],
+                               cwd=project_directory, check=True)
+                print(f"Kernel source generation verified: {args.backend}; no device execution.")
+            else:
+                subprocess.run(["dotnet", "run", "--project", "Cradle.csproj", "-c", "Release",
+                                "--no-build", "--no-restore", "--",
+                                "Cuda" if args.backend == "CUDA" else args.backend],
+                               cwd=project_directory, check=True)
 
 
 if __name__ == "__main__":
