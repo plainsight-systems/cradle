@@ -11,7 +11,7 @@ until it loads real open weights and generates text.
 Named for the "cradle" in Jack Crenshaw's "Let's Build a Compiler!" (1988 to 1995), the starter program his whole
 series grew from.
 
-**Status:** the project site and publishing scripts are in place. The runnable baseline and setup prologue are published. Lesson 1 code now runs and checks vector addition on the GPU; its article is being prepared. Local experiments have validated
+**Status:** the project site and publishing scripts are in place. The runnable baseline and setup prologue are published. Lesson 1 code now runs and checks vector addition on the GPU; its article is published. Local experiments have validated
 C# transformer kernels and a complete small model on Apple Silicon through ILGPU's native Metal backend.
 
 ## Repository layout
