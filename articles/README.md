@@ -27,7 +27,7 @@ Use `lesson = 0` and folder `00-getting-the-cradle-ready` for the prologue. It h
 publication total. Name subsequent folders `01-the-cradle`, `02-buffers-and-shapes`, and so on. Titles and dates may change while drafting;
 keep published folder names and `personal_slug` stable. The planned index is in `web/data/lessons.json`; setup text is in `web/data/prologue.json`.
 
-Lesson 1 starts from `lesson-00`. Every numbered lesson requires the previous lesson's tag in `start_tag`. The
+Lesson 1 starts from `lesson-00`. Its article explains the backend metadata, device selection, and kernel-build test as part of the lesson; the shared build scripts are already in the starting snapshot. Every numbered lesson requires the previous lesson's tag in `start_tag`. The
 completed tag must match the lesson number. Correction tags such as `lesson-03.1` are accepted. Production builds
 and exports verify these tags exist locally; publish the tags with the code when releasing an article.
 

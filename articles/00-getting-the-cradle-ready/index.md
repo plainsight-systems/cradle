@@ -135,6 +135,18 @@ For ordinary editing, you can use `dotnet run --project src/Cradle`; it builds b
 
 Setup has already checked that the application's compiler settings can translate, launch, and verify a temporary kernel on the CPU. The xUnit test loads the ILGPU runtime assembly and checks that its accelerator type is available. Together they check the compiler wiring and the dependency path through our projects to the test runner.
 
-These checks tell us the tools fit together. Running a kernel on a particular GPU tells us something more, and we’ll do that in lesson 1.
+The repository also includes a command for the broader build checks:
+
+```sh
+python3 scripts/check_dotnet.py
+```
+
+GitHub Actions runs this same command on Windows, Linux, and macOS. It prepares the dependencies, checks
+that a kernel can be built repeatedly, builds the current program for each GPU backend, and runs the
+CPU-side tests. As we extend the program, those same commands check the new code and tests. You can run
+them locally too, without a GPU.
+
+Running the program on an actual GPU is a separate check, using the same `dotnet run` command we use
+while developing it. We’ll do that in lesson 1, when we choose a backend and start using the GPU.
 
 We now have a program that runs, a place for its tests, and fixed versions of the tools it depends on. In lesson 1, we’ll put those tools to work on the GPU.
