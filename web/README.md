@@ -54,6 +54,17 @@ a published lesson. Preview builds include draft pages, but the index still trea
 
 ## Building and publishing
 
+The complete published-lesson RSS feed is `/lessons/index.xml`, advertised in
+the HTML head. It includes the prologue and all published lessons without a
+recent-item limit. The same draft/date boundary applies even in preview builds;
+About, the roadmap's unpublished entries, and the preview fixture never enter
+the feed. Only title, description, publication date and URLs are emitted.
+
+RSS reading links point to the Cradle edition; the GUID is the existing
+personal-site canonical URL. Plainsight Systems uses that identity to avoid
+listing a syndicated lesson twice. Its combined writing index refreshes this
+feed automatically, so publishing a lesson requires no matching hub edit.
+
 ```sh
 python3 scripts/site.py build --base-url https://example.org/cradle/
 ```

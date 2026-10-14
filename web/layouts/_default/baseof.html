@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ if not .IsHome }}{{ .Title }} · {{ end }}Cradle</title>
+  <link rel="alternate" type="application/rss+xml" title="Cradle lessons" href="{{ "lessons/index.xml" | absURL }}">
   <meta name="description" content="{{ .Description | default site.Params.description }}">
   {{ $canonical := .Params.canonicalURL | default .Permalink }}
   <link rel="canonical" href="{{ $canonical }}">

@@ -2,7 +2,7 @@ baseURL = 'https://cradle.plainsight-systems.com/'
 title = 'Cradle'
 languageCode = 'en-us'
 timeZone = 'UTC'
-disableKinds = ['taxonomy', 'term', 'RSS']
+disableKinds = ['taxonomy', 'term']
 enableRobotsTXT = true
 
 [params]
@@ -32,3 +32,8 @@ target = 'assets'
 source = '../docs/assets'
 target = 'assets/art'
 includeFiles = ['cradle-readme.png']
+
+# Only the published article section emits a feed; no About or preview pages.
+[outputs]
+home = ["HTML"]
+section = ["HTML"]

@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -278,6 +279,16 @@ publish_assets = {json.dumps(['images/figure.svg'] if images else [])}
         all_html = "".join(p.read_text() for p in output.rglob("*.html"))
         self.assertNotIn("PRIVATE", all_html)
         self.assertFalse((output / "preview").exists())
+        feed = ET.parse(output / "lessons/index.xml")
+        items = feed.findall("./channel/item")
+        self.assertEqual(len(items), 2)
+        self.assertEqual({item.findtext("title") for item in items}, {"Lesson 0", "Lesson 1"})
+        self.assertFalse((output / "about/index.xml").exists())
+        self.assertIn('https://example.org/cradle/lessons/index.xml', html)
+        for item in items:
+            self.assertTrue(item.findtext("link").startswith("https://example.org/cradle/lessons/"))
+            self.assertTrue(item.findtext("guid").startswith("https://andrewphunter.com/writing/"))
+
 
     @unittest.skipUnless(shutil.which("hugo"), "Hugo required for rendering integration")
     def test_series_status_ignores_drafts_and_future_even_in_preview(self):
@@ -309,6 +320,11 @@ publish_assets = {json.dumps(['images/figure.svg'] if images else [])}
         series = (output / "lessons/index.html").read_text()
         self.assertEqual(series.count('class="lesson-published"'), 2)
         self.assertEqual(series.count('class="lesson-planned"'), 16)
+        feed = ET.parse(output / "lessons/index.xml")
+        items = feed.findall("./channel/item")
+        self.assertEqual([item.findtext("title") for item in items], ["Lesson 5", "Lesson 1"])
+        self.assertNotIn("PRIVATE", (output / "lessons/index.xml").read_text())
+        self.assertNotIn("/preview/", (output / "lessons/index.xml").read_text())
         # With no published content, every row remains planned and Latest disappears.
         for path in (content / "lessons").glob("*-test"):
             shutil.rmtree(path)
@@ -319,6 +335,7 @@ publish_assets = {json.dumps(['images/figure.svg'] if images else [])}
         self.assertIn("0 of 18 lessons published", series)
         self.assertEqual(series.count('class="lesson-planned"'), 18)
         self.assertNotIn('Latest:', series)
+        self.assertEqual(ET.parse(output / 'lessons/index.xml').findall('./channel/item'), [])
 
 
 if __name__ == "__main__":
