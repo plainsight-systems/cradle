@@ -1,6 +1,6 @@
 # Build and publishing commands
 
-## .NET baseline
+## .NET build and validation
 
 Install .NET SDK **10.0.401**, Git, and Python **3.11+**. From the repository root:
 
@@ -18,15 +18,24 @@ It restores the upstream compiler and solution using committed package locks and
 `check_kernel_setup.py`. That check copies the application's project settings into a temporary directory
 whose path contains spaces, compiles a small kernel, explicitly executes it on the CPU, and checks all 1,031
 outputs. It checks both the first and a repeated build, and verifies that the generated kernel type is
-actually present in the application assembly. It neither changes the application nor requires a GPU. The xUnit test checks runtime assembly
-loading, and the application prints its greeting.
+actually present in the application assembly. It neither changes the application nor requires a GPU.
+The xUnit tests check runtime loading and agreement between the generated kernels and the backend
+recorded for device selection. The application requires a matching GPU and verifies its numerical output.
 
 `Cradle.csproj` imports the kernel build targets and points to the compiler built by setup. `ILGPUBackend`
 defaults to `Metal` on macOS and `CUDA` elsewhere. Override it with `-p:ILGPUBackend=OpenCL` or
 `-p:ILGPUBackend=ROCm` when building for those backends. Use the same setting on later rebuilds. The pin
 requires one backend per build; generating several together produces invalid C#. Device selection at
-runtime must match the compiled backend. Native GPU toolchains are not invoked during the default build;
-the GPU runtime compiles the embedded source when loading it.
+runtime uses that same setting, embedded as `AssemblyMetadata` in the application. It filters out other
+backends and OpenCL CPU devices before selecting a GPU by memory size. A missing matching GPU is an
+error, never a CPU fallback. For example:
+
+```sh
+dotnet run --project src/Cradle -p:ILGPUBackend=OpenCL
+```
+
+Changing the property with `--no-build` cannot change the backend in an existing executable. Native GPU
+toolchains are not invoked during the default build; the GPU runtime compiles the embedded source when loading it.
 
 `eng/Cradle.Kernels.targets` imports upstream cleanup, replaces the compilation invocation target to quote
 response-file paths, and explicitly orders source swapping after compilation. It rebuilds kernel output each time, removing stale generated
@@ -51,20 +60,22 @@ copied into the dependency checkout during setup. For an intentional dependency 
 locks and the application/test locks, review their diffs, and validate before committing. Do not bypass locked
 restore to get past an unexplained setup failure. ILGPU source and package binaries retain their own licenses.
 
-### Run the same checks as CI
+### The stable CI command
 
 ```sh
 python3 scripts/check_dotnet.py
 ```
 
-The Windows, Linux, and macOS workflow invokes this same command. It runs setup, checks fresh and
-repeated kernel builds, builds the current solution for CUDA/ROCm/OpenCL/Metal, and runs its CPU-side
-tests for each backend. It finishes by building and testing the platform default. New lesson code and
-tests use these existing commands; the workflow does not need to change for each installment.
+`.github/workflows/dotnet.yml` invokes this command on Windows, Linux, and macOS. It runs setup (including
+the CPU kernel check), then checks kernel generation, builds the current solution, and runs CPU-side tests
+for each of CUDA/ROCm/OpenCL/Metal. The final build and test use the platform default. All commands run
+locally too; their package versions and compiler pin are identical to the application's.
 
-Hosted CI does not run the application, since the numbered lessons require a GPU. Run the application
-locally with `dotnet run --project src/Cradle` to exercise its behavior. From lesson 1 onward, this
-requires a matching GPU and driver. Compilation checks do not establish GPU hardware compatibility.
+The hosted workflow does not run the GPU application. Validate GPU execution with
+`dotnet run --project src/Cradle`, adding the backend property when needed. That is the same execution
+path used in the lesson. Keep numerical checks in the growing program and add CPU-side tests to the test
+project as needed; neither requires a new workflow for each article. Source generation alone does not
+validate a GPU driver or native kernel execution.
 
 ## Site requirements
 

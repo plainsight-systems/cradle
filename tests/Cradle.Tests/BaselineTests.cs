@@ -9,7 +9,7 @@ public class BaselineTests
     public void RuntimeDependencyLoadsWithoutRequiringAGpu()
     {
         // Loading the runtime proves the source dependency reaches the test host.
-        // GPU discovery and numerical checks arrive with the first kernel.
+        // This check does not discover devices or execute GPU work.
         var runtime = Assembly.Load("ILGPU");
         Assert.NotNull(runtime.GetType("ILGPU.Runtime.Accelerator", throwOnError: true));
     }

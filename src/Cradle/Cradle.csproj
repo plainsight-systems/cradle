@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="$(ILGPURepository)/Src/ILGPU/ILGPU.csproj" />
+    <AssemblyMetadata Include="ILGPUBackend" Value="$(ILGPUBackend)" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Import Project="../../eng/Cradle.Kernels.targets" />

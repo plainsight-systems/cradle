@@ -11,7 +11,7 @@ until it loads real open weights and generates text.
 Named for the "cradle" in Jack Crenshaw's "Let's Build a Compiler!" (1988 to 1995), the starter program his whole
 series grew from.
 
-**Status:** the project site and publishing scripts are in place. The runnable baseline and setup prologue are published. The numbered lessons have not been written. Local experiments have validated
+**Status:** the project site and publishing scripts are in place. The runnable baseline and setup prologue are published. Lesson 1 code now runs and checks vector addition on the GPU; its article is being prepared. Local experiments have validated
 C# transformer kernels and a complete small model on Apple Silicon through ILGPU's native Metal backend.
 
 ## Repository layout
@@ -28,7 +28,7 @@ C# transformer kernels and a complete small model on Apple Silicon through ILGPU
 
 Downloaded weights belong in ignored `models/`; local experiments stay in ignored `experiments/`.
 
-## Run the baseline
+## Build and run
 
 Install .NET SDK **10.0.401**, Git, and Python **3.11 or newer**. From the repository root:
 
@@ -41,20 +41,47 @@ dotnet run --project src/Cradle -c Release --no-build --no-restore
 
 On Windows, use `python` if that is your installed Python command. Setup fetches and builds the pinned
 ILGPU source and verifies kernel compilation and execution with a temporary CPU check; first use requires
-internet access. Expect `Kernel setup verified: CPU, 1031 checked outputs.`, one passing dependency-load test and
-`Cradle is ready.` The baseline does not require a GPU; lesson 1 adds GPU discovery and the first kernel.
+internet access. Setup prints `Kernel setup verified: CPU, 1031 checked outputs.` The tests require no GPU.
+The application requires a matching GPU and checks all 1,031 addition results. A successful run ends with
+`All 1031 results match.` The prologue's greeting-only program remains available at `lesson-00`.
 
 The SDK pin is in `global.json`; ILGPU's source revision is in `eng/ILGPU.props`. The setup script uses
 reviewed package lock files for both upstream build dependencies and our projects. See
-[setup details](scripts/README.md#net-baseline) and the [prologue](articles/00-getting-the-cradle-ready/index.md).
+[setup details](scripts/README.md#net-build-and-validation) and the [prologue](articles/00-getting-the-cradle-ready/index.md).
 
-Run the same checks as hosted CI with `python3 scripts/check_dotnet.py`. The command prepares the
-pinned dependencies, checks repeated kernel builds, builds the solution for each GPU backend, and runs
-CPU-side tests. It finishes with a build and test for the platform default. The workflow uses this same
-command on Windows, Linux, and macOS, and later lessons add code and tests beneath those commands.
+### Choose the GPU backend
 
-Run the application separately to check its behavior. Starting in lesson 1, that requires a matching GPU;
-hosted CI does not assume GPU availability. See the [CI runs](https://github.com/plainsight-systems/cradle/actions/workflows/dotnet.yml).
+A backend is the GPU API ILGPU uses to compile and run kernels. This compiler revision builds for one
+backend at a time. `ILGPUBackend` defaults to `Metal` on Mac and `CUDA` elsewhere. Choose the backend
+supported by your GPU and driver when running, for example:
+
+```sh
+dotnet run --project src/Cradle -p:ILGPUBackend=OpenCL
+```
+
+The other GPU build values are `CUDA`, `ROCm`, and `Metal`. The same build setting is recorded in the
+application, so device selection only considers GPUs for which that build can run its kernels. Among
+those devices, it selects the one reporting the most memory. OpenCL CPU devices are excluded.
+If none match, the application reports the requested backend and exits with an error.
+
+Changing backends requires rebuilding; no project-file edit is needed. Repeat the property on subsequent
+builds and runs that build. `--no-build` uses the backend already compiled into the executable; supplying
+a different property alongside it does not switch backends.
+
+### Run the hosted CI checks locally
+
+```sh
+python3 scripts/check_dotnet.py
+```
+
+This is the same command the Windows, Linux, and macOS workflow runs. It prepares dependencies, checks
+fresh and repeated kernel builds, builds the actual application for CUDA/ROCm/OpenCL/Metal, and runs the
+CPU-side tests for each build. It finishes by building and testing the platform default. As lessons add
+code and tests, this command continues to check them without requiring a GPU on the CI runner.
+
+GPU execution is a separate check: use the application run command above on suitable hardware. The
+lesson code has been run on Apple Silicon through Metal; generating kernel code for other backends
+does not establish hardware compatibility. See the [CI runs](https://github.com/plainsight-systems/cradle/actions/workflows/dotnet.yml).
 
 ## Preview the site
 
