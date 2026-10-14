@@ -48,9 +48,13 @@ The SDK pin is in `global.json`; ILGPU's source revision is in `eng/ILGPU.props`
 reviewed package lock files for both upstream build dependencies and our projects. See
 [setup details](scripts/README.md#net-baseline) and the [prologue](articles/00-getting-the-cradle-ready/index.md).
 
-Validated locally on Apple Silicon macOS and in GitHub Actions on Windows, Linux, and macOS. The checks
-restore the pinned dependencies, check kernel compilation and CPU execution, build, test runtime loading, and launch the baseline. Actual GPU correctness
-checks are separate. See the [CI runs](https://github.com/plainsight-systems/cradle/actions/workflows/dotnet.yml).
+Run the same checks as hosted CI with `python3 scripts/check_dotnet.py`. The command prepares the
+pinned dependencies, checks repeated kernel builds, builds the solution for each GPU backend, and runs
+CPU-side tests. It finishes with a build and test for the platform default. The workflow uses this same
+command on Windows, Linux, and macOS, and later lessons add code and tests beneath those commands.
+
+Run the application separately to check its behavior. Starting in lesson 1, that requires a matching GPU;
+hosted CI does not assume GPU availability. See the [CI runs](https://github.com/plainsight-systems/cradle/actions/workflows/dotnet.yml).
 
 ## Preview the site
 

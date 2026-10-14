@@ -51,9 +51,20 @@ copied into the dependency checkout during setup. For an intentional dependency 
 locks and the application/test locks, review their diffs, and validate before committing. Do not bypass locked
 restore to get past an unexplained setup failure. ILGPU source and package binaries retain their own licenses.
 
-`.github/workflows/dotnet.yml` runs setup (including the CPU kernel check), kernel source generation for
-CUDA/ROCm/OpenCL/Metal, build, CPU-side tests, and the program on standard Windows, Linux, and macOS runners.
-It makes no GPU-execution claim. Hardware checks remain separate.
+### Run the same checks as CI
+
+```sh
+python3 scripts/check_dotnet.py
+```
+
+The Windows, Linux, and macOS workflow invokes this same command. It runs setup, checks fresh and
+repeated kernel builds, builds the current solution for CUDA/ROCm/OpenCL/Metal, and runs its CPU-side
+tests for each backend. It finishes by building and testing the platform default. New lesson code and
+tests use these existing commands; the workflow does not need to change for each installment.
+
+Hosted CI does not run the application, since the numbered lessons require a GPU. Run the application
+locally with `dotnet run --project src/Cradle` to exercise its behavior. From lesson 1 onward, this
+requires a matching GPU and driver. Compilation checks do not establish GPU hardware compatibility.
 
 ## Site requirements
 
