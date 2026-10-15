@@ -53,9 +53,10 @@ the formula exporter.
 
 ## Publishing
 
-Full articles publish to both andrewphunter.com and Cradle's GitHub Pages site. The personal article URL is the
-canonical URL, derived from `personal_slug`. Publish the personal edition before, or alongside, the project-site
-edition so that canonical destination exists. Sources remain here; each destination owns its presentation and
+Full articles publish to both andrewphunter.com and Cradle's GitHub Pages site. Both editions use
+`https://cradle.plainsight-systems.com/lessons/<article-folder>/` as the canonical URL. This is derived
+automatically for every lesson; `personal_slug` only locates the blog edition. Publish the project edition
+before, or alongside, the personal edition so that canonical destination exists. Sources remain here; each destination owns its presentation and
 deployment. See [the publishing commands](../scripts/README.md).
 
 Drafts and future-dated articles appear only in explicit local preview builds. Changing a draft to public does

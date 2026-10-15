@@ -121,7 +121,7 @@ publish_assets = {json.dumps(['images/figure.svg'] if images else [])}
         doc = (self.target / "index.md").read_text()
         self.assertIn(git(self.root, "rev-parse", "HEAD"), doc)
         self.assertIn('"part": 1', doc)
-        self.assertIn("https://andrewphunter.com/writing/cradle-01-test/", doc)
+        self.assertIn('"canonicalURL": "https://cradle.plainsight-systems.com/lessons/01-test/"', doc)
         self.assertNotIn(str(self.root), doc)
         before = self.target.stat().st_mtime_ns
         self.run_export()
@@ -230,6 +230,10 @@ publish_assets = {json.dumps(['images/figure.svg'] if images else [])}
         self.write_article(body="[Next](lesson:02#a-checked-result)\n\n[Next again][two]\n\n[two]: lesson:02\n")
         self.commit()
         files = self.run_export()
+        # A future lesson gets a project canonical without redirecting blog navigation.
+        with redirect_stdout(io.StringIO()):
+            later = export("02-test", self.site, root=self.root)
+        self.assertIn('"canonicalURL": "https://cradle.plainsight-systems.com/lessons/02-test/"', later["index.md"].decode())
         self.assertIn("https://andrewphunter.com/writing/cradle-02-test/#a-checked-result", files["index.md"].decode())
         staged = Path(self.temp.name) / "links"
         site_module.stage_content(staged, root=self.root)
@@ -264,7 +268,8 @@ publish_assets = {json.dumps(['images/figure.svg'] if images else [])}
         with redirect_stdout(io.StringIO()):
             check(output, "https://example.org/cradle/")
         html = (output / "lessons/01-test/index.html").read_text()
-        self.assertIn('href="https://andrewphunter.com/writing/cradle-01-test/"', html)
+        self.assertIn('<link rel="canonical" href="https://cradle.plainsight-systems.com/lessons/01-test/"', html)
+        self.assertIn('<meta property="og:url" content="https://cradle.plainsight-systems.com/lessons/01-test/"', html)
         self.assertIn('href="/cradle/lessons/01-test/"', (output / "index.html").read_text())
         prologue = (output / "lessons/00-test/index.html").read_text()
         self.assertIn("/ Prologue", prologue)

@@ -116,7 +116,7 @@ The exporter:
 - Accepts only `draft = false` articles dated today or earlier (UTC), with valid starting and completed code tags.
 - Copies `index.md` and only the images named in `publish_assets`. Rejects symlinks and paths escaping the article.
 - Represents the prologue as `lesson = 0` and personal-site `part = 0`; lesson numbering stays 1–18. The personal site labels part zero “Prologue” in its series navigation.
-- Emits native Hugo JSON front matter with the personal site's `series` and `part` fields, canonical URL, and source repository, article path, and commit revision. The body stays Markdown, with code snapshot links added and portable lesson links resolved.
+- Emits native Hugo JSON front matter with the personal site's `series` and `part` fields, Cradle canonical URL, and source repository, article path, and commit revision. The body stays Markdown, with code snapshot links added and portable lesson links resolved to the personal edition. The destination template must honor `canonicalURL` in both the canonical link and `og:url`.
 - For `math = true`, uses the pinned Hugo math renderer to replace formula spans with MathML. Literal fenced/inline code is preserved; the personal edition needs no additional math scripts.
 - Requires the selected source files to be committed before writing. Dry runs may inspect uncommitted edits.
 - Records destination hashes in `data/cradle-exports/<personal-slug>.json`, outside published content. Commit that record alongside the exported bundle.

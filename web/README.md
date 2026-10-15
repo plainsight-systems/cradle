@@ -61,7 +61,8 @@ About, the roadmap's unpublished entries, and the preview fixture never enter
 the feed. Only title, description, publication date and URLs are emitted.
 
 RSS reading links point to the Cradle edition; the GUID is the existing
-personal-site canonical URL. Plainsight Systems uses that identity to avoid
+personal-edition URL, retained as a stable feed identity independently of the
+HTML canonical URL. Plainsight Systems uses that identity to avoid
 listing a syndicated lesson twice. Its combined writing index refreshes this
 feed automatically, so publishing a lesson requires no matching hub edit.
 
@@ -77,8 +78,9 @@ GitHub Pages deploys the production artifact through `.github/workflows/pages.ym
 source must be set to GitHub Actions. Set `params.repository` in `web/hugo.toml` before publishing lessons so
 code snapshot links can resolve; published lessons require locally available release tags.
 
-The personal site receives separate exports from the same article sources. Its article URL is canonical, and
-it owns its own presentation and deployment. See [commands and publishing](../scripts/README.md) for export,
+The personal site receives separate exports from the same article sources. Both editions declare the
+Cradle lesson URL as canonical, including Open Graph metadata. The personal site owns its presentation
+and deployment. See [commands and publishing](../scripts/README.md) for export,
 destination-edit protection, testing, and deployment setup.
 
 ## Presentation and licensing

@@ -79,6 +79,10 @@ class Article:
 
     @property
     def canonical(self):
+        return f"https://cradle.plainsight-systems.com/lessons/{self.folder.name}/"
+
+    @property
+    def personal_url(self):
         return f"https://andrewphunter.com/writing/{self.meta['personal_slug']}/"
 
 
@@ -187,7 +191,7 @@ def rendered_body(article, available, personal=False):
         target = next((a for a in available if a.meta["lesson"] == number), None)
         if target is None:
             raise PublicationError(f"{article.folder.name}: link points to an unavailable lesson {number}")
-        base = target.canonical if personal else f"../{target.folder.name}/"
+        base = target.personal_url if personal else f"../{target.folder.name}/"
         return base + (fragment or "")
     body = re.sub(r"\]\(lesson:([0-9]+)(#[^\s)]*)?\)",
                   lambda m: f"]({destination(m[1], m[2])})", article.body)

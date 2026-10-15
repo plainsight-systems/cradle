@@ -1,7 +1,8 @@
 {{- /* Publication contract: a complete metadata-only feed of this section's
 published articles, newest first. Explicit filtering also applies to preview
-builds. Link to this edition; use its canonical URL as identity so the hub can
-deduplicate syndicated editions. No article bodies or private source metadata. */ -}}
+builds. Link to this edition; keep the personal-edition URL as the stable feed
+identity so the hub can deduplicate syndicated editions. HTML canonical URLs
+identify Cradle as the original. No article bodies or private source metadata. */ -}}
 {{- printf "<?xml version=\"1.0\" encoding=\"utf-8\"?>" | safeHTML }}
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -15,7 +16,7 @@ deduplicate syndicated editions. No article bodies or private source metadata. *
     <item>
       <title>{{ .Title | htmlEscape | safeHTML }}</title>
       <link>{{ .Permalink | htmlEscape | safeHTML }}</link>
-      <guid isPermaLink="true">{{ .Params.canonicalURL | default .Permalink | htmlEscape | safeHTML }}</guid>
+      <guid isPermaLink="true">{{ .Params.rssGuid | default .Permalink | htmlEscape | safeHTML }}</guid>
       <pubDate>{{ .PublishDate.Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</pubDate>
       <description>{{ .Description | plainify | htmlEscape | safeHTML }}</description>
     </item>
