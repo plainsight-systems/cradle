@@ -11,7 +11,8 @@ until it loads real open weights and generates text.
 Named for the "cradle" in Jack Crenshaw's "Let's Build a Compiler!" (1988 to 1995), the starter program his whole
 series grew from.
 
-**Status:** the project site and publishing scripts are in place. The runnable baseline and setup prologue are published. Lesson 1 code now runs and checks vector addition on the GPU; its article is published. Local experiments have validated
+**Status:** the prologue and lesson 1 are published. Lesson 2's code adds explicit GPU runtime ownership,
+a CPU matrix class, and checked GPU matrix addition; its article is next. Local experiments have validated
 C# transformer kernels and a complete small model on Apple Silicon through ILGPU's native Metal backend.
 
 ## Repository layout
@@ -42,8 +43,9 @@ dotnet run --project src/Cradle -c Release --no-build --no-restore
 On Windows, use `python` if that is your installed Python command. Setup fetches and builds the pinned
 ILGPU source and verifies kernel compilation and execution with a temporary CPU check; first use requires
 internet access. Setup prints `Kernel setup verified: CPU, 1031 checked outputs.` The tests require no GPU.
-The application requires a matching GPU and checks all 1,031 addition results. A successful run ends with
-`All 1031 results match.` The prologue's greeting-only program remains available at `lesson-00`.
+The application requires a matching GPU and compares a 2×3 matrix addition against a CPU reference.
+A successful run ends with `All 6 matrix elements match.` The prologue's greeting-only program remains
+available at `lesson-00`, and lesson 1's vector addition is at `lesson-01`.
 
 The SDK pin is in `global.json`; ILGPU's source revision is in `eng/ILGPU.props`. The setup script uses
 reviewed package lock files for both upstream build dependencies and our projects. See
