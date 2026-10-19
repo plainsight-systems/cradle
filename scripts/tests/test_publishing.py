@@ -292,7 +292,8 @@ publish_assets = {json.dumps(['images/figure.svg'] if images else [])}
         self.assertIn('https://example.org/cradle/lessons/index.xml', html)
         for item in items:
             self.assertTrue(item.findtext("link").startswith("https://example.org/cradle/lessons/"))
-            self.assertTrue(item.findtext("guid").startswith("https://andrewphunter.com/writing/"))
+            canonical = item.findtext("link").replace("https://example.org/cradle/", "https://cradle.plainsight-systems.com/")
+            self.assertEqual(item.findtext("guid"), canonical)
 
 
     @unittest.skipUnless(shutil.which("hugo"), "Hugo required for rendering integration")

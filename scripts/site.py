@@ -25,8 +25,6 @@ def stage_content(destination, preview=False, root=ROOT):
         target.mkdir(parents=True)
         meta = page_metadata(article)
         meta["canonicalURL"] = article.canonical
-        # Keep feed identities stable and shared with the personal-site edition.
-        meta["rssGuid"] = article.personal_url
         meta["weight"] = meta["lesson"]
         (target / "index.md").write_text(document(meta, rendered_body(article, available)), encoding="utf-8")
         for name, data in article.assets.items():
