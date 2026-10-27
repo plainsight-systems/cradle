@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 850" role="img" aria-labelledby="title desc"><title id="title">Inner loop: pair values and accumulate</title><desc id="desc">Row and column stay zero. For i zero, read left[0,0]=1 and right[0,0]=7; sum becomes 7. For i one read 2 and 9; sum becomes 25. For i two read 3 and 11; sum becomes 58. Highlighted cells advance across the left row and down the right column. Finally store 58 in result[0,0].</desc>
+<rect x="1" y="1" width="898" height="848" rx="7" fill="#fbf8f0" stroke="#fbf8f0" stroke-width="2"/>
+<g font-family="IBM Plex Sans, Arial, sans-serif">
+<text x="35" y="44" font-size="29" fill="#172f46" text-anchor="start" font-weight="700">Keep row = 0 and column = 0; move i</text>
+<text x="190" y="91" font-size="24" fill="#9b7028" text-anchor="start" font-weight="700">Across the left row</text>
+<text x="450" y="91" font-size="24" fill="#167779" text-anchor="start" font-weight="700">Down the right column</text>
+<text x="45" y="153" font-size="28" fill="#172f46" text-anchor="start" font-weight="700">i = 0</text>
+<rect x="190" y="113" width="52" height="52" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="4"/>
+<text x="216.0" y="147.32" font-size="25" fill="#9b7028" text-anchor="middle" font-weight="700">1</text>
+<path d="M202 156 h28" stroke="#9b7028" stroke-width="3"/>
+<rect x="248" y="113" width="52" height="52" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="274.0" y="147.32" font-size="25" fill="#9b7028" text-anchor="middle" font-weight="700">2</text>
+<rect x="306" y="113" width="52" height="52" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="332.0" y="147.32" font-size="25" fill="#9b7028" text-anchor="middle" font-weight="700">3</text>
+<rect x="190" y="171" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="216.0" y="205.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">4</text>
+<rect x="248" y="171" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="274.0" y="205.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">5</text>
+<rect x="306" y="171" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="332.0" y="205.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">6</text>
+<rect x="450" y="113" width="52" height="52" rx="7" fill="#d9eeeb" stroke="#167779" stroke-width="4"/>
+<text x="476.0" y="147.32" font-size="25" fill="#167779" text-anchor="middle" font-weight="700">7</text>
+<path d="M462 156 h28" stroke="#167779" stroke-width="3"/>
+<rect x="508" y="113" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="534.0" y="147.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">8</text>
+<rect x="450" y="171" width="52" height="52" rx="7" fill="#d9eeeb" stroke="#167779" stroke-width="2"/>
+<text x="476.0" y="205.32" font-size="25" fill="#167779" text-anchor="middle" font-weight="700">9</text>
+<rect x="508" y="171" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="534.0" y="205.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">10</text>
+<rect x="450" y="229" width="52" height="52" rx="7" fill="#d9eeeb" stroke="#167779" stroke-width="2"/>
+<text x="476.0" y="263.32" font-size="25" fill="#167779" text-anchor="middle" font-weight="700">11</text>
+<rect x="508" y="229" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="534.0" y="263.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">12</text>
+<text x="660" y="160" font-size="27" fill="#172f46" text-anchor="start" font-weight="700">1 × 7 = 7</text>
+<text x="660" y="204" font-size="25" fill="#172f46" text-anchor="start" font-weight="400">0 + 7 = 7</text>
+<text x="660" y="253" font-size="26" fill="#a74d34" text-anchor="start" font-weight="700">sum = 7</text>
+<path d="M35 320 H865" stroke="#c7cdd0" stroke-width="1"/>
+<text x="45" y="377" font-size="28" fill="#172f46" text-anchor="start" font-weight="700">i = 1</text>
+<rect x="190" y="337" width="52" height="52" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="216.0" y="371.32" font-size="25" fill="#9b7028" text-anchor="middle" font-weight="700">1</text>
+<rect x="248" y="337" width="52" height="52" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="4"/>
+<text x="274.0" y="371.32" font-size="25" fill="#9b7028" text-anchor="middle" font-weight="700">2</text>
+<path d="M260 380 h28" stroke="#9b7028" stroke-width="3"/>
+<rect x="306" y="337" width="52" height="52" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="332.0" y="371.32" font-size="25" fill="#9b7028" text-anchor="middle" font-weight="700">3</text>
+<rect x="190" y="395" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="216.0" y="429.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">4</text>
+<rect x="248" y="395" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="274.0" y="429.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">5</text>
+<rect x="306" y="395" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="332.0" y="429.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">6</text>
+<rect x="450" y="337" width="52" height="52" rx="7" fill="#d9eeeb" stroke="#167779" stroke-width="2"/>
+<text x="476.0" y="371.32" font-size="25" fill="#167779" text-anchor="middle" font-weight="700">7</text>
+<rect x="508" y="337" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="534.0" y="371.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">8</text>
+<rect x="450" y="395" width="52" height="52" rx="7" fill="#d9eeeb" stroke="#167779" stroke-width="4"/>
+<text x="476.0" y="429.32" font-size="25" fill="#167779" text-anchor="middle" font-weight="700">9</text>
+<path d="M462 438 h28" stroke="#167779" stroke-width="3"/>
+<rect x="508" y="395" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="534.0" y="429.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">10</text>
+<rect x="450" y="453" width="52" height="52" rx="7" fill="#d9eeeb" stroke="#167779" stroke-width="2"/>
+<text x="476.0" y="487.32" font-size="25" fill="#167779" text-anchor="middle" font-weight="700">11</text>
+<rect x="508" y="453" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="534.0" y="487.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">12</text>
+<text x="660" y="384" font-size="27" fill="#172f46" text-anchor="start" font-weight="700">2 × 9 = 18</text>
+<text x="660" y="428" font-size="25" fill="#172f46" text-anchor="start" font-weight="400">7 + 18 = 25</text>
+<text x="660" y="477" font-size="26" fill="#a74d34" text-anchor="start" font-weight="700">sum = 25</text>
+<path d="M35 544 H865" stroke="#c7cdd0" stroke-width="1"/>
+<text x="45" y="601" font-size="28" fill="#172f46" text-anchor="start" font-weight="700">i = 2</text>
+<rect x="190" y="561" width="52" height="52" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="216.0" y="595.32" font-size="25" fill="#9b7028" text-anchor="middle" font-weight="700">1</text>
+<rect x="248" y="561" width="52" height="52" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="274.0" y="595.32" font-size="25" fill="#9b7028" text-anchor="middle" font-weight="700">2</text>
+<rect x="306" y="561" width="52" height="52" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="4"/>
+<text x="332.0" y="595.32" font-size="25" fill="#9b7028" text-anchor="middle" font-weight="700">3</text>
+<path d="M318 604 h28" stroke="#9b7028" stroke-width="3"/>
+<rect x="190" y="619" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="216.0" y="653.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">4</text>
+<rect x="248" y="619" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="274.0" y="653.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">5</text>
+<rect x="306" y="619" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="332.0" y="653.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">6</text>
+<rect x="450" y="561" width="52" height="52" rx="7" fill="#d9eeeb" stroke="#167779" stroke-width="2"/>
+<text x="476.0" y="595.32" font-size="25" fill="#167779" text-anchor="middle" font-weight="700">7</text>
+<rect x="508" y="561" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="534.0" y="595.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">8</text>
+<rect x="450" y="619" width="52" height="52" rx="7" fill="#d9eeeb" stroke="#167779" stroke-width="2"/>
+<text x="476.0" y="653.32" font-size="25" fill="#167779" text-anchor="middle" font-weight="700">9</text>
+<rect x="508" y="619" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="534.0" y="653.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">10</text>
+<rect x="450" y="677" width="52" height="52" rx="7" fill="#d9eeeb" stroke="#167779" stroke-width="4"/>
+<text x="476.0" y="711.32" font-size="25" fill="#167779" text-anchor="middle" font-weight="700">11</text>
+<path d="M462 720 h28" stroke="#167779" stroke-width="3"/>
+<rect x="508" y="677" width="52" height="52" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="534.0" y="711.32" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">12</text>
+<text x="660" y="608" font-size="27" fill="#172f46" text-anchor="start" font-weight="700">3 × 11 = 33</text>
+<text x="660" y="652" font-size="25" fill="#172f46" text-anchor="start" font-weight="400">25 + 33 = 58</text>
+<text x="660" y="701" font-size="26" fill="#a74d34" text-anchor="start" font-weight="700">sum = 58</text>
+<rect x="130" y="789" width="640" height="43" rx="7" fill="#172f46" stroke="#172f46" stroke-width="2"/>
+<text x="450" y="819" font-size="25" fill="#fbf8f0" text-anchor="middle" font-weight="400">After the loop: result[0, 0] = 58</text>
+</g></svg>

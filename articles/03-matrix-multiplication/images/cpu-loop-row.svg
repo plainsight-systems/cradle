@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 345" role="img" aria-labelledby="title desc"><title id="title">Outer loop: choose a left row</title><desc id="desc">With row equal to zero, the first left row 1,2,3 is selected. The corresponding first result row has two positions to fill. No right column has been selected yet. All indices are zero based.</desc>
+<rect x="1" y="1" width="898" height="343" rx="7" fill="#fbf8f0" stroke="#fbf8f0" stroke-width="2"/>
+<g font-family="IBM Plex Sans, Arial, sans-serif">
+<text x="35" y="44" font-size="29" fill="#172f46" text-anchor="start" font-weight="700">row = 0: choose the row we will fill</text>
+<text x="115" y="102" font-size="25" fill="#172f46" text-anchor="start" font-weight="700">Left</text>
+<text x="425" y="102" font-size="25" fill="#172f46" text-anchor="start" font-weight="700">Right</text>
+<text x="675" y="102" font-size="25" fill="#172f46" text-anchor="start" font-weight="700">Result</text>
+<text x="30" y="151" font-size="19" fill="#9b7028" text-anchor="start" font-weight="400">row 0</text>
+<text x="30" y="218" font-size="19" fill="#536475" text-anchor="start" font-weight="400">row 1</text>
+<rect x="115" y="117" width="62" height="62" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="146.0" y="157.92000000000002" font-size="28" fill="#9b7028" text-anchor="middle" font-weight="700">1</text>
+<rect x="183" y="117" width="62" height="62" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="214.0" y="157.92000000000002" font-size="28" fill="#9b7028" text-anchor="middle" font-weight="700">2</text>
+<rect x="251" y="117" width="62" height="62" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="282.0" y="157.92000000000002" font-size="28" fill="#9b7028" text-anchor="middle" font-weight="700">3</text>
+<rect x="115" y="185" width="62" height="62" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="146.0" y="225.92000000000002" font-size="28" fill="#536475" text-anchor="middle" font-weight="400">4</text>
+<rect x="183" y="185" width="62" height="62" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="214.0" y="225.92000000000002" font-size="28" fill="#536475" text-anchor="middle" font-weight="400">5</text>
+<rect x="251" y="185" width="62" height="62" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="282.0" y="225.92000000000002" font-size="28" fill="#536475" text-anchor="middle" font-weight="400">6</text>
+<rect x="425" y="117" width="54" height="54" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="452.0" y="152.64" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">7</text>
+<rect x="485" y="117" width="54" height="54" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="512.0" y="152.64" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">8</text>
+<rect x="425" y="177" width="54" height="54" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="452.0" y="212.64" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">9</text>
+<rect x="485" y="177" width="54" height="54" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="512.0" y="212.64" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">10</text>
+<rect x="425" y="237" width="54" height="54" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="452.0" y="272.64" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">11</text>
+<rect x="485" y="237" width="54" height="54" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="512.0" y="272.64" font-size="25" fill="#536475" text-anchor="middle" font-weight="400">12</text>
+<rect x="675" y="117" width="62" height="62" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="706.0" y="157.92000000000002" font-size="28" fill="#9b7028" text-anchor="middle" font-weight="700">?</text>
+<rect x="743" y="117" width="62" height="62" rx="7" fill="#efe1ba" stroke="#9b7028" stroke-width="2"/>
+<text x="774.0" y="157.92000000000002" font-size="28" fill="#9b7028" text-anchor="middle" font-weight="700">?</text>
+<rect x="675" y="185" width="62" height="62" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="706.0" y="225.92000000000002" font-size="28" fill="#536475" text-anchor="middle" font-weight="400">?</text>
+<rect x="743" y="185" width="62" height="62" rx="7" fill="white" stroke="#c7cdd0" stroke-width="2"/>
+<text x="774.0" y="225.92000000000002" font-size="28" fill="#536475" text-anchor="middle" font-weight="400">?</text>
+<text x="115" y="314" font-size="24" fill="#9b7028" text-anchor="start" font-weight="400">Use this row with each right-hand column.</text>
+</g></svg>

@@ -11,9 +11,9 @@ until it loads real open weights and generates text.
 Named for the "cradle" in Jack Crenshaw's "Let's Build a Compiler!" (1988 to 1995), the starter program his whole
 series grew from.
 
-**Status:** the prologue and lessons 1–2 are published. Lesson 2 adds explicit GPU runtime ownership,
-a CPU matrix class, and checked GPU matrix addition. Lesson 3's code adds checked matrix and matrix-vector
-multiplication on the GPU; its article is next. Local experiments have validated
+**Status:** the prologue and lessons 1–3 are published. Lesson 2 adds explicit GPU runtime ownership,
+a CPU matrix class, and checked GPU matrix addition. Lesson 3 adds checked matrix and matrix-vector
+multiplication on the GPU, with diagrams tracing the CPU loops and parallel GPU work. Local experiments have validated
 C# transformer kernels and a complete small model on Apple Silicon through ILGPU's native Metal backend.
 
 ## Repository layout

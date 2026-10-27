@@ -3,6 +3,7 @@
 This is the authoritative source for "Let's Build a Transformer!". Each installment gets a numbered folder with
 `index.md` and its images. The setup prologue is published in `00-getting-the-cradle-ready/`; lesson 1 is published in `01-the-cradle/`.
 Lesson 2 is published in `02-buffers-and-shapes/`, with runnable, tested increments for building the matrix class.
+Lesson 3 is published in `03-matrix-multiplication/`, with diagrams following the CPU loops and GPU kernel.
 
 Use TOML front matter, with an explicit draft flag and publication date:
 
