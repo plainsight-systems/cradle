@@ -114,4 +114,61 @@ public class MatrixTests
         Assert.Throws<ArgumentException>(() => Matrix.FromArray(2, 3, new float[5]));
         Assert.Throws<ArgumentNullException>(() => Matrix.FromArray(1, 1, null!));
     }
+
+    [Fact]
+    public void MultiplicationProducesKnownRectangularProduct()
+    {
+        var left = Matrix.FromArray(2, 3,
+        [
+            1, 2, 3,
+            4, 5, 6
+        ]);
+
+        var right = Matrix.FromArray(3, 2,
+        [
+            7, 8,
+            9, 10,
+            11, 12
+        ]);
+
+        var result = left * right;
+
+        Assert.Equal(2, result.Rows);
+        Assert.Equal(2, result.Columns);
+        Assert.Equal(
+            new float[] { 58, 64, 139, 154 },
+            result.ToArray());
+    }
+
+    [Fact]
+    public void MultiplicationRejectsIncompatibleDimensions()
+    {
+        var left = Matrix.Create(2, 3);
+        var right = Matrix.Create(2, 3);
+
+        Assert.Throws<ArgumentException>(() => left * right);
+    }
+
+    [Fact]
+    public void MultiplicationAppliesMatrixToColumnVector()
+    {
+        var weights = Matrix.FromArray(2, 3,
+        [
+            1, 2, 3,
+            4, 5, 6
+        ]);
+
+        var vector = Matrix.FromArray(3, 1,
+        [
+            1,
+            2,
+            3
+        ]);
+
+        var result = weights * vector;
+
+        Assert.Equal(2, result.Rows);
+        Assert.Equal(1, result.Columns);
+        Assert.Equal(new float[] { 14, 32 }, result.ToArray());
+    }
 }

@@ -5,18 +5,24 @@ namespace Cradle;
 
 internal static class Program
 {
-    private static void AddMatrices(
+    private static void MultiplyMatrices(
         Index2D index,
-        int columns,
+        int sharedDimensions,
+        int rightColumns,
         ArrayView<float> left,
         ArrayView<float> right,
         ArrayView<float> output)
     {
-        var row = index.X;
-        var column = index.Y;
-        var offset = row * columns + column;
+        float sum = 0;
 
-        output[offset] = left[offset] + right[offset];
+        for (int i = 0; i < sharedDimensions; i++)
+        {
+            var leftElement = left[index.X * sharedDimensions + i];
+            var rightElement = right[i * rightColumns + index.Y];
+            sum += leftElement * rightElement;
+        }
+
+        output[index.X * rightColumns + index.Y] = sum;
     }
 
     private static bool CheckResults(Matrix result, Matrix expected)
@@ -77,6 +83,43 @@ internal static class Program
         Console.WriteLine();
     }
 
+    private static bool RunMultiplication(
+        AcceleratorStream stream, Matrix left, Matrix right)
+    {
+        var expected = left * right;
+
+        // Allocate and upload the inputs; the kernel fills the output buffer.
+        using var leftBuffer = stream.Allocate1D((float[])left);
+        using var rightBuffer = stream.Allocate1D((float[])right);
+        using var outputBuffer = stream.Allocate1D<float>(expected.Length);
+
+        // Launch one kernel invocation per output element.
+        stream.Launch(
+            new Index2D(expected.Rows, expected.Columns),
+            index => MultiplyMatrices(
+                index, left.Columns, right.Columns,
+                leftBuffer.View, rightBuffer.View, outputBuffer.View)
+        );
+
+        stream.Synchronize();
+
+        var actual = Matrix.FromArray(
+            expected.Rows, expected.Columns, outputBuffer.GetAsArray1D());
+
+        if (!CheckResults(actual, expected))
+        {
+            return false;
+        }
+
+        Console.WriteLine($"Shape: {actual.Rows}x{actual.Columns}");
+        Console.WriteLine($"Actual:   {string.Join(", ", actual)}");
+        Console.WriteLine($"Expected: {string.Join(", ", expected)}");
+        Console.WriteLine();
+        Console.WriteLine($"All {actual.Length} matrix elements match.");
+
+        return true;
+    }
+
     private static void Main()
     {
         try
@@ -93,46 +136,35 @@ internal static class Program
                 4, 5, 6
             ]);
 
-            var right = Matrix.FromArray(2, 3,
+            var right = Matrix.FromArray(3, 2,
             [
-                10, 20, 30,
-                40, 50, 60
+                7, 8,
+                9, 10,
+                11, 12
             ]);
-
-            var expected = left + right;
 
             var stream = accelerator.DefaultStream;
 
-            // Allocate and upload the inputs; the kernel fills the output buffer.
-            using var leftBuffer = stream.Allocate1D((float[])left);
-            using var rightBuffer = stream.Allocate1D((float[])right);
-            using var outputBuffer = stream.Allocate1D<float>(left.Length);
-
-            // Launch one kernel invocation per matrix element.
-            stream.Launch(
-                new Index2D(left.Rows, left.Columns),
-                index => AddMatrices(
-                    index, left.Columns,
-                    leftBuffer.View, rightBuffer.View, outputBuffer.View)
-            );
-
-            stream.Synchronize();
-
-            var actual = Matrix.FromArray(
-                left.Rows, left.Columns, outputBuffer.GetAsArray1D());
-
-            if (!CheckResults(actual, expected))
+            WriteSection("Matrix multiplication");
+            if (!RunMultiplication(stream, left, right))
             {
                 Environment.ExitCode = 1;
                 return;
             }
 
-            WriteSection("Results");
-            Console.WriteLine($"Shape: {actual.Rows}x{actual.Columns}");
-            Console.WriteLine($"Actual:   {string.Join(", ", actual)}");
-            Console.WriteLine($"Expected: {string.Join(", ", expected)}");
-            Console.WriteLine();
-            Console.WriteLine($"All {actual.Length} matrix elements match.");
+            var vector = Matrix.FromArray(3, 1,
+            [
+                1,
+                2,
+                3
+            ]);
+
+            WriteSection("Matrix-vector multiplication");
+            if (!RunMultiplication(stream, left, vector))
+            {
+                Environment.ExitCode = 1;
+                return;
+            }
         }
         catch (InvalidOperationException e)
         {

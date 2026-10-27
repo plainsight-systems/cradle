@@ -13,6 +13,9 @@ public sealed class Matrix : IEquatable<Matrix>, IEnumerable<float>
     private const string ShapesMustMatch =
         "Matrix addition requires matching rows and columns.";
 
+    private const string MultiplicationDimensionsMustMatch =
+        "Matrix multiplication requires the left column count to equal the right row count.";
+
     private readonly float[] _values;
 
     private Matrix(int rows, int columns, float[] values)
@@ -79,6 +82,36 @@ public sealed class Matrix : IEquatable<Matrix>, IEnumerable<float>
         {
             for (int column = 0; column < left.Columns; column++)
                 result[row, column] = left[row, column] + right[row, column];
+        }
+
+        return result;
+    }
+
+    public static Matrix operator *(Matrix left, Matrix right)
+    {
+        ArgumentNullException.ThrowIfNull(left);
+        ArgumentNullException.ThrowIfNull(right);
+        if (left.Columns != right.Rows)
+            throw new ArgumentException(MultiplicationDimensionsMustMatch, nameof(right));
+
+        var result = Create(left.Rows, right.Columns);
+
+        // loop through each row of left
+        for(int row = 0; row < left.Rows; row++)
+        {
+            // loop through each column of right
+            for(int column = 0; column < right.Columns; column++)
+            {
+                float sum = 0;
+
+                //perform the dot product
+                for (int i = 0; i < left.Columns; i++)
+                {
+                    sum += left[row, i] * right[i, column];
+                }
+
+                result[row, column] = sum;
+            }
         }
 
         return result;
